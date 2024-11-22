@@ -23,10 +23,4 @@ export class CreateUserDto{
     @IsOptional()
     @IsString()
     profilePic? : string;
-
-    @IsDateString()
-    createdAt : Date;
-
-    @IsDateString()
-    updatedAt : Date;
 }

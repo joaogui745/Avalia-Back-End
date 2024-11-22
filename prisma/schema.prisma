@@ -18,9 +18,46 @@ model User{
   department String
   course String
   profilePic String?
-  createdAt DateTime
-  updatedAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
+
+model Evaluation {
+  id Int @id @default(autoincrement())
+  userID Int
+  professorID Int
+  subjectID Int
+  content String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Comment {
+  id Int @id @default(autoincrement())
+  userID Int
+  evaluationID Int
+  content String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Professor {
+  id Int @id @default(autoincrement())
+  name String
+  department String
+  subjectID Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Subject {
+  id Int @id @default(autoincrement())
+  name String
+  professorID String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 
 
 
