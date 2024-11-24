@@ -7,7 +7,7 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = env("DATABASE_URL")
+  url      = "file:./dev.db"
 }
 
 model User{
@@ -20,16 +20,22 @@ model User{
   profilePic String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  evaluations Evaluation[]
+  comments Comment[]
 }
 
 model Evaluation {
   id Int @id @default(autoincrement())
   userID Int
-  professorID Int
-  subjectID Int
+  professorID Int @unique
+  subjectID Int @unique
   content String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  comments Comment[]
+  user User @relation(fields: [userID], references: [id], onDelete: Cascade)
+  professor Professor @relation(fields: [professorID], references: [id])
+  subject Subject @relation(fields: [subjectID], references: [id])
 }
 
 model Comment {
@@ -39,23 +45,29 @@ model Comment {
   content String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  user User @relation(fields: [userID], references:[id], onDelete: Cascade)
+  evaluation Evaluation @relation(fields: [evaluationID], references: [id], onDelete: Cascade)
 }
 
 model Professor {
   id Int @id @default(autoincrement())
   name String
   department String
-  subjectID Int
+  // subjectID Int @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  evaluation Evaluation?
+  subject Subject[]
 }
 
 model Subject {
   id Int @id @default(autoincrement())
   name String
-  professorID String
+  //professorID String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  evaluation Evaluation?
+  professor Professor[]
 }
 
 

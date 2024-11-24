@@ -1,4 +1,6 @@
 import { IsDateString, IsEmail, IsNotEmpty, IsOptional, IsString } from "class-validator"
+import { CreateCommentDto } from "src/comment/dto/createComment.dto";
+import { CreateEvaluationDto } from "src/evaluation/dto/createEvaluation.dto";
 export class CreateUserDto{
     @IsNotEmpty()
     @IsString()
@@ -23,5 +25,4 @@ export class CreateUserDto{
     @IsOptional()
     @IsString()
     profilePic? : string;
-
 }
