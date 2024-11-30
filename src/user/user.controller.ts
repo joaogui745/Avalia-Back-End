@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, ValidationPipe } from '@nestjs/common';
-import { UserService } from './user.service';
+import { UserService} from './user.service';
 import { CreateUserDto } from './dto/createUser.dto';
 import { UpdateUserDto } from './dto/updateUser.dto';
 
@@ -10,9 +10,13 @@ export class UserController {
   createUser(@Body(ValidationPipe) userData : CreateUserDto){
     return this.userService.createUser(userData);
   }
-  @Get(':id')
+  @Get('id/:id') //Eu coloquei a especificação id/:id por causa do novo @get, unico jeito que consegui
   findUser(@Param('id', ParseIntPipe) userId : number){
     return this.userService.findUser(userId);
+  }
+  @Get('email/:email') // achar pelo email
+  getUserByEmail(@Param('email') email: string){
+    return this.userService.findByEmail(email);
   }
   @Delete(':id')
   deleteUser(@Param('id', ParseIntPipe) userId : number){

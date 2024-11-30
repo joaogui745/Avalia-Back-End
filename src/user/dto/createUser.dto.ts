@@ -1,6 +1,4 @@
-import { IsDateString, IsEmail, IsNotEmpty, IsOptional, IsString } from "class-validator"
-import { CreateCommentDto } from "src/comment/dto/createComment.dto";
-import { CreateEvaluationDto } from "src/evaluation/dto/createEvaluation.dto";
+import { IsDateString, IsEmail, IsNotEmpty, IsOptional, IsString, } from "class-validator" // retirados os imports não utilizados!
 export class CreateUserDto{
     @IsNotEmpty()
     @IsString()
