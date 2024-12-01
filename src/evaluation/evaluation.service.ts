@@ -2,6 +2,7 @@ import { Injectable , NotFoundException } from '@nestjs/common';
 import { CreateEvaluationDto } from './dto/createEvaluation.dto';
 import { UpdateEvaluationDto } from './dto/updateEvaluation.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { NotFoundError } from 'rxjs';
 
 @Injectable()
 export class EvaluationService {
@@ -76,10 +77,58 @@ export class EvaluationService {
   }
 
   async update(evaluationID: number, evaluationData: UpdateEvaluationDto) {
-    return await this.prisma.evaluation.update({where : {id : evaluationID}, data : evaluationData});
+    const { userID, professorID , subjectID } = evaluationData
+    if (userID){ 
+      const userExistis = await this.prisma.user.findUnique({
+      where:{ id: userID }
+    });
+      if(!userExistis){
+        throw new NotFoundException(`User with ID ${userID} not found`);
+      }
+    
+    }
+    if (professorID){ 
+      const professorExistis = await this.prisma.user.findUnique({
+      where:{ id: professorID
+       }
+    });
+      if(!professorExistis){
+        throw new NotFoundException(`professor with ID ${professorID} not found`);
+      }
+    
+    }
+    if (subjectID){ 
+      const subjectExistis = await this.prisma.user.findUnique({
+      where:{ id: subjectID }
+    });
+      if(!subjectExistis){
+        throw new NotFoundException(`Subject with ID ${subjectID} not found`);
+      }
+    
+    };
+    return this.prisma.evaluation.update({where: {id: evaluationID
+
+    }, data: evaluationData,}).catch((error) => { if(error.code === 'P2025' ){
+      throw new NotFoundException(`Evaluation with ID ${evaluationID} not found`);
+    }
+    throw error;
+  });
+
+
+
   }
 
   async remove(evaluationID: number) {
-    return await this.prisma.evaluation.delete({where : {id : evaluationID}});
+    return this.prisma.evaluation.delete({where:{ id: evaluationID},
+    })
+    .catch((error) => {
+      if (error.code === 'P2025'){
+      throw new NotFoundException(`Evaluation with ID ${evaluationID} not found`);
+      }
+      throw Error;
+
+      
+
+    })
   }
 }
