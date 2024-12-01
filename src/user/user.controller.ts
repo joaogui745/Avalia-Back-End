@@ -10,11 +10,11 @@ export class UserController {
   createUser(@Body(ValidationPipe) userData : CreateUserDto){
     return this.userService.createUser(userData);
   }
-  @Get('id/:id') //Eu coloquei a especificação id/:id por causa do novo @get, unico jeito que consegui
+  @Get('id/:id') //Eu coloquei a especificação id/:id por causa do novo @get, http://localhost:3000/user/id/#id#
   findUser(@Param('id', ParseIntPipe) userId : number){
     return this.userService.findUser(userId);
   }
-  @Get('email/:email') // achar pelo email
+  @Get('email/:email') // achar pelo email http://localhost:3000/user/email/#validemail@gmail.com#
   getUserByEmail(@Param('email') email: string){
     return this.userService.findByEmail(email);
   }
