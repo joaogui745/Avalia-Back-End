@@ -2,7 +2,6 @@ import { Injectable , NotFoundException } from '@nestjs/common';
 import { CreateEvaluationDto } from './dto/createEvaluation.dto';
 import { UpdateEvaluationDto } from './dto/updateEvaluation.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { NotFoundError } from 'rxjs';
 
 @Injectable()
 export class EvaluationService {
