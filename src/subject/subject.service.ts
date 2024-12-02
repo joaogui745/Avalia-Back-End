@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable , NotFoundException } from '@nestjs/common';
 import { CreateSubjectDto } from './dto/createSubject.dto';
 import { UpdateSubjectDto } from './dto/updateSubject.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -7,22 +7,62 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class SubjectService {
   constructor(private readonly prisma : PrismaService){}
   async create(subjectData: CreateSubjectDto) {
-    return await this.prisma.subject.create({data : subjectData});
+
+    return await this.prisma.subject.create({
+      data: subjectData
+
+    });
   }
 
   async findAll() {
-    return await this.prisma.subject.findMany();
+    return await this.prisma.subject.findMany({
+      include: {
+        professor: true
+      }
+    })
   }
 
   async findOne(subjectID: number) {
-    return await this.prisma.subject.findUnique({where : {id : subjectID}});
+    const subject = await this.prisma.subject.findUnique({
+      where: {id: subjectID},
+      include:{
+        professor: true,
+      }
+    })
+    if (!subject){
+      throw new NotFoundException(`Disciplina com ID ${subjectID} não encontrada`)
+    }
+    return subject;
   }
 
   async update(subjectID: number, subjectData: UpdateSubjectDto) {
-    return await this.prisma.subject.update({where : {id : subjectID}, data : subjectData});
+    const existesubject = await this.prisma.subject.findUnique({
+      where:{
+
+        id: subjectID
+      }
+    });
+    if (!existesubject){
+      throw new NotFoundException(`Disciplina com ID ${subjectID} não encontrada`)
+
+    }
+    return await this.prisma.subject.update({
+      where:{ id: subjectID},
+      data: {
+        name: subjectData.name,
+      }
+    ,});
   }
 
   async remove(subjectID: number) {
-    return await this.prisma.subject.delete({where : {id : subjectID}});
+    return await this.prisma.subject.delete({
+      where: {id: subjectID },
+    }).catch((error) => {
+      if(error.code === 'P2025'){ throw new NotFoundException
+        (`Disciplina com ID ${subjectID} não encontrada`) // rotas testadas
+
+      }
+      throw error;
+    });
   }
 }

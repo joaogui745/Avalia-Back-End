@@ -1,17 +1,15 @@
-import { IsNotEmpty, IsString, ValidateNested } from "class-validator";
+import { IsNotEmpty, IsString, IsNumber} from "class-validator";
 
 export class CreateCommentDto {
     @IsNotEmpty()
     @IsString()
-    content : string
-    user : {
-        connect :  {
-            id : number;
-        }
-    }
-    evaluation : {
-        connect : {
-            id :number
-        }
-    }
+    content: string;
+
+    @IsNotEmpty()
+    @IsNumber()
+    userID: number;
+
+    @IsNotEmpty()
+    @IsNumber()
+    evaluationID: number;
 }
