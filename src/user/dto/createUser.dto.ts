@@ -1,4 +1,4 @@
-import { IsDateString, IsEmail, IsNotEmpty, IsOptional, IsString, } from "class-validator" // retirados os imports não utilizados!
+import { IsEmail, IsNotEmpty, IsOptional, IsString, } from "class-validator" // retirados os imports não utilizados!
 export class CreateUserDto{
     @IsNotEmpty()
     @IsString()
