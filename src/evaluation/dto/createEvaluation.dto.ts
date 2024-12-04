@@ -1,24 +1,19 @@
-import { IsNotEmpty, IsString } from "class-validator";
-import { CreateProfessorDto } from "src/professor/dto/createProfessor.dto";
-import { CreateSubjectDto } from "src/subject/dto/createSubject.dto";
+import { IsNotEmpty, IsNumber, IsString } from "class-validator";
 
 export class CreateEvaluationDto {
     @IsNotEmpty()
+    @IsNumber()
+    userID: number;
+  
+    @IsNotEmpty()
+    @IsNumber()
+    professorID: number;
+  
+    @IsNotEmpty()
+    @IsNumber()
+    subjectID: number;
+  
+    @IsNotEmpty()
     @IsString()
-    content : string
-    user : {
-        connect :  {id : number}
-    }
-    professor : {
-        connectOrCreate : {
-            where : {id : number},
-            create : CreateProfessorDto
-        }
-    }
-    subject : {
-        connectOrCreate : {
-            where : {id : number},
-            create : CreateSubjectDto
-        }
-    }
+    content: string;
 }
