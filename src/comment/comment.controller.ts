@@ -29,7 +29,7 @@ export class CommentController {
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateCommentDto: UpdateCommentDto , @CurrentUser() currentUser: UserPayload) {
     if (updateCommentDto.userID !== currentUser.sub)
-      throw new UnauthorizedException("Só é possível editar posts para sua conta")
+      throw new UnauthorizedException("Só é possível editar post para sua conta")
     return this.commentService.update(+id, updateCommentDto);
   }
 
