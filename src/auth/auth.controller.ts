@@ -1,5 +1,6 @@
-import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { CadastroRequestBody } from './dto/cadastro-Request-Body.dto';
+import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
 import {LoginRequestBody } from './dto/login-Request-Body.dto';
 import { Public } from './decorators/isPublic.decorator';
 
@@ -14,10 +15,9 @@ export class AuthController {
   login(@Body() loginRequestBody : LoginRequestBody){
       return this.authService.login(loginRequestBody)
   }
-  // @Public()
-  // @HttpCode(HttpStatus.OK)
-  // @Post('cadastro')
-  // cadastro(@Body() cadastroRequestBody:CadastroRequestBody){
-  //     return this.authService.cadastro(cadastroRequestBody)
-  // }
+ @Public()
+  @Post('cadastro')
+  cadastro(@Body() cadastroRequestBody:CadastroRequestBody){
+      return this.authService.cadastro(cadastroRequestBody)
+  }
 }

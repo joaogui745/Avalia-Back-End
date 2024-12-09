@@ -29,7 +29,7 @@ export class AuthService {
       access_token:jwtToken
     }
   }
-  async cadastrar(cadastroRequestBody:CadastroRequestBody):Promise<UserToken>{
+  async cadastro(cadastroRequestBody:CadastroRequestBody):Promise<UserToken>{
     const user=this.userService.createUser(cadastroRequestBody)
     if (!user){
       throw new UnauthorizedException('Email cadastrado já em uso.'); //não sei se essa mensagem é necessária, pois me parece redundante
