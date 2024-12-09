@@ -22,7 +22,7 @@ export class CommentController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) { //não sei se deveria ter validação ou não -Caio
+  findOne(@Param('id') id: string) { //não sei se deveria ter validação ou não 
     return this.commentService.findOne(+id);
   }
 
