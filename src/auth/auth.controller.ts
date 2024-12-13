@@ -11,13 +11,9 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
   
   @Public()
+  @HttpCode(HttpStatus.OK)
   @Post('login')
   login(@Body() loginRequestBody : LoginRequestBody){
       return this.authService.login(loginRequestBody)
-  }
- @Public()
-  @Post('cadastro')
-  cadastro(@Body() cadastroRequestBody:CadastroRequestBody){
-      return this.authService.cadastro(cadastroRequestBody)
   }
 }
