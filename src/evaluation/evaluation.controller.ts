@@ -4,6 +4,7 @@ import { CreateEvaluationDto } from './dto/createEvaluation.dto';
 import { UpdateEvaluationDto } from './dto/updateEvaluation.dto';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { UserPayload } from 'src/auth/types/UserPayload';
+import { Public } from 'src/auth/decorators/isPublic.decorator';
 
 @Controller('evaluation')
 export class EvaluationController {
@@ -16,11 +17,13 @@ export class EvaluationController {
     return this.evaluationService.create(EvaluationData);
   }
 
+  @Public()
   @Get()
   findAll() {
     return this.evaluationService.findAll();
   }
 
+  @Public()
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.evaluationService.findOne(id);
