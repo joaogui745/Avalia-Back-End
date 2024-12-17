@@ -27,12 +27,19 @@ export class EvaluationController {
   }
 
   @Patch(':id')
-  update(@Param('id', ParseIntPipe) id: number, @Body(ValidationPipe) evaluationData: UpdateEvaluationDto) {
+  update(@Param('id', ParseIntPipe) id: number, @Body(ValidationPipe) evaluationData: UpdateEvaluationDto,@CurrentUser() currentUser: UserPayload) {
+    if (evaluationData.userID !== currentUser.sub){
+      throw new UnauthorizedException("Só é possível editar avaliações da própria conta.")
+    }
     return this.evaluationService.update(id, evaluationData);
   }
 
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
+  async remove(@Param('id', ParseIntPipe) id: number, @CurrentUser() currentUser: UserPayload) {
+    const evaluation= await this.evaluationService.findOne(id);
+    if (evaluation.userID !== currentUser.sub){
+      throw new UnauthorizedException("Só é possível editar avaliações da própria conta.")
+    }
     return this.evaluationService.remove(id);
   }
 }
