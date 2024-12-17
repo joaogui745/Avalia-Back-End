@@ -1,5 +1,5 @@
 import { ConfigService } from '@nestjs/config';
-import { CadastroRequestBody } from './dto/cadastro-Request-Body.dto';
+import { CreateUserDto } from 'src/user/dto/createUser.dto';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { LoginRequestBody } from './dto/login-Request-Body.dto';
@@ -17,7 +17,7 @@ export class AuthService {
     private readonly jwtService : JwtService,){}
 
   async login(loginRequestBody:LoginRequestBody):Promise<UserToken>{
-    const user = this.validateUser(loginRequestBody.email,loginRequestBody.passWord)
+    const user = await this.validateUser(loginRequestBody.email,loginRequestBody.passWord)
     if (!user){
       throw new UnauthorizedException('Email e/ou senha inválidos.');
     }
@@ -29,11 +29,8 @@ export class AuthService {
       access_token:jwtToken
     }
   }
-  async cadastro(cadastroRequestBody:CadastroRequestBody):Promise<UserToken>{
-    const user=this.userService.createUser(cadastroRequestBody)
-    if (!user){
-      throw new UnauthorizedException('Email cadastrado já em uso.'); //não sei se essa mensagem é necessária, pois me parece redundante
-    }
+  async cadastro(createUserDto:CreateUserDto):Promise<UserToken>{
+    const user=await this.userService.createUser(createUserDto)
 
     const payload:UserPayload={email:(await user).email,sub:(await user).id};
 

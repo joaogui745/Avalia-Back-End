@@ -15,20 +15,10 @@ export class UserController {
     return this.userService.createUser(userData);
   }
 
+  @Public()
   @Get('id/:id') //Eu coloquei a especificação id/:id por causa do novo @get, http://localhost:3000/user/id/#id#
-  findUser(@Param('id', ParseIntPipe) userId : number, @CurrentUser() currentUser: UserPayload){
-    if (userId !== currentUser.sub){
-      throw new UnauthorizedException("Só é possível visualizar os dados da própria conta.")
-    }
+  findUser(@Param('id', ParseIntPipe) userId : number){
     return this.userService.findUser(userId);
-  }
-
-  @Get('email/:email') // achar pelo email http://localhost:3000/user/email/#validemail@gmail.com#
-  getUserByEmail(@Param('email') email: string, @CurrentUser() currentUser: UserPayload){
-    if (email !== currentUser.email){
-      throw new UnauthorizedException("Só é visualizar os dados da própria conta.")
-    }  
-    return this.userService.findByEmail(email);
   }
   
   @Delete(':id')

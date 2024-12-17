@@ -70,7 +70,6 @@ export class EvaluationService {
     });
     if (!evaluation){
       throw new NotFoundException(`Evaluation with ID ${evaluationID} not found`); //rota funcionando
-
     }
     return evaluation
   }

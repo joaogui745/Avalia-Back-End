@@ -88,33 +88,13 @@ export class UserService {
                 throw new ConflictException('This email is already in use.',);
             }
         }
-        const hashedPassword = await bcrypt.hash(user.passWord,10)
-        const isPassWordEqual = await bcrypt.compare(user.passWord,hashedPassword)
-        if (isPassWordEqual){
-            return this.prisma.user.update({
-                where: { id: userId },
-                data: {
-                    ...userData,
-                },
-                select: {
-                    id: true,
-                    name: true,
-                    email :true,
-                    department: true,
-                    course: true,
-                    profilePic: true,
-                    createdAt: true,
-                    updatedAt: true, //retorna as informções, menos as sensíveis (senha)
-    
-                },
-            });
+        if (userData.passWord) { 
+            userData.passWord = await bcrypt.hash(userData.passWord, 10);
         }
+
         return this.prisma.user.update({
-            where: { id: userId },
-            data: {
-                ...userData,
-                passWord:hashedPassword,
-            },
+            where: { id : userId },
+            data: {...userData},
             select: {
                 id: true,
                 name: true,
