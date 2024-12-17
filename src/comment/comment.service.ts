@@ -6,7 +6,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 @Injectable()
 export class CommentService {
   constructor(private readonly prisma : PrismaService){}
-  async create(commentData:  CreateCommentDto) {
+  async create(commentData: CreateCommentDto) {
     const { content, userID, evaluationID } = commentData;
     const [userExists, evaluationExists] = await Promise.all([
       this.prisma.user.findUnique({where: { id: userID } }),
@@ -86,7 +86,6 @@ export class CommentService {
   async remove(commentID: number) {
     return this.prisma.comment.delete({where : {id : commentID}}).catch((error) => {
       if (error.code === 'P2025'){
-
         throw new NotFoundException(`Comment with ID ${commentID} not found`); // funcionou
       }
             throw error;
