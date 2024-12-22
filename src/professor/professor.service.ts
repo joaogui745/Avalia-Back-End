@@ -82,4 +82,26 @@ throw new NotFoundException(`Professor com ID ${professorID} não encontrado`);
     });
   }
 
+  async getEvaluationsForProfessor(professorId: number) {
+    return this.prisma.evaluation.findMany({
+      where: {
+        professorID: professorId,
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            department: true,
+            course: true,
+            profilePic: true,
+          }
+        },
+        professor: true, 
+        subject: true,
+
+  }});
+  }
+
 }

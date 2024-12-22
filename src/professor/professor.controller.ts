@@ -48,4 +48,16 @@ export class ProfessorController {
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.professorService.remove(id);
   }
+  
+  @Public()
+  @Get('evaluations/:professorId')
+  async getEvaluationsByProfessor(@Param('professorId', ParseIntPipe) professorId: number) {
+
+    if (!professorId) {
+      throw new Error('Professor ID is required');
+    }
+
+    return this.professorService.getEvaluationsForProfessor(Number(professorId));
+  }
+
 }
