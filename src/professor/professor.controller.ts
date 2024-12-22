@@ -25,8 +25,19 @@ export class ProfessorController {
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.professorService.findOne(id);
   }
-
+  
   @Public()
+  @Get('subjects/:professorId')
+  async getSubjectsByProfessor(@Param('professorId', ParseIntPipe) professorId: number) {
+    if (!professorId) {
+      throw new Error('Professor ID is required');
+    }
+
+    return this.professorService.getSubjectsForProfessor(Number(professorId));
+  }
+
+
+  
   @Patch(':id')
   update(@Param('id', ParseIntPipe) id: number, @Body(ValidationPipe) updateProfessorDto: UpdateProfessorDto) {
     return this.professorService.update(+id, updateProfessorDto);

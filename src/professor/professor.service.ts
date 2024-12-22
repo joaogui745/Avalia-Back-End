@@ -69,4 +69,17 @@ throw new NotFoundException(`Professor com ID ${professorID} não encontrado`);
     }
 
   )}
+
+  async getSubjectsForProfessor(professorId: number) {
+    return this.prisma.evaluation.findMany({
+      where: {
+        professorID: professorId,
+      },
+      select: {
+        subject: true, // Inclui informações das disciplinas
+      },
+      
+    });
+  }
+
 }
