@@ -7,5 +7,70 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = env("DATABASE_URL")
+  url      = "file:./dev.db"
 }
+
+model User{
+  id Int @id @default(autoincrement())
+  name String
+  email String @unique
+  passWord String
+  department String
+  course String
+  profilePic String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  evaluations Evaluation[]
+  comments Comment[]
+}
+
+model Evaluation {
+  id Int @id @default(autoincrement())
+  userID Int
+  professorID Int // retirado @unique que limita a flexibilidade de criar múltiplas avaliações para o mesmo professor.
+  subjectID Int // retirado @unique que limita a flexibilidade de criar múltiplas avaliações para a mesma disciplina.
+  content String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  comments Comment[]
+  user User @relation(fields: [userID], references: [id], onDelete: Cascade, onUpdate: Cascade) // Tratamento em caso se for atualizado
+  professor Professor @relation(fields: [professorID], references: [id], onDelete: Restrict, onUpdate: Cascade ) // Tratamento em caso se for atualizado ou deletado
+  subject Subject @relation(fields: [subjectID], references: [id], onDelete: Restrict, onUpdate: Cascade) // Tratamento em caso se for atualizado ou deletado
+}
+
+model Comment {
+  id Int @id @default(autoincrement())
+  userID Int
+  evaluationID Int
+  content String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user User @relation(fields: [userID], references:[id], onDelete: Cascade, onUpdate: Cascade) // Tratamento em caso se for atualizado ou deletado
+  evaluation Evaluation @relation(fields: [evaluationID], references: [id], onDelete: Cascade, onUpdate: Cascade) // Tratamento em caso se for atualizado ou deletado
+}
+
+model Professor {
+  id Int @id @default(autoincrement())
+  name String
+  department String
+  // subjectID Int @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  evaluation Evaluation[] // ? one-to-one -> [] one-to-many
+  subject Subject[]
+}
+
+model Subject {
+  id Int @id @default(autoincrement())
+  name String
+  //professorID String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  evaluation Evaluation[] // ? one-to-one -> [] one-to-many
+  professor Professor[]
+}
+
+
+
+
+
